@@ -19,13 +19,14 @@ import ListingItem from "../components/ListingItem";
 
 export default function Profile() {
   const auth = getAuth();
+  const navigate = useNavigate();
   const [changeDetail, setChangeDetail] = useState(false);
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+
   const [formaData, setFormData] = useState({
-    name: "auth.currentUser.displayName",
-    email: "auth.currentUser.email",
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
   });
   const { name, email } = formaData;
   function onLogout() {
@@ -67,7 +68,7 @@ export default function Profile() {
       const q = query(
         listingRef,
         where("userRef", "==", auth.currentUser.uid),
-        orderBy("timeStamp", "desc")
+        orderBy("timestamp", "desc")
       );
       const querySnap = await getDocs(q);
       let listings = [];
@@ -168,7 +169,10 @@ export default function Profile() {
             <h2 className="text-2xl text-center font-semibold mb-6">
               My Listings
             </h2>
-            <ul>
+            <ul
+              className="sm:grid sm:grid-cols-2 lg:grid-cols-3 first-letter
+            xl:grid-cols-4 2xl:grid-cols-5 mt-6 mb-6"
+            >
               {listings.map((listing) => (
                 <ListingItem
                   key={listing.id}
