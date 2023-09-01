@@ -1,6 +1,5 @@
 import {
   collection,
-  doc,
   getDocs,
   limit,
   orderBy,
@@ -37,7 +36,7 @@ export default function Offers() {
             data: doc.data(),
           });
         });
-        setListings(listingRef);
+        setListings(listings);
         setLoading(false);
       } catch (error) {
         toast.error("Could not fetch listing");

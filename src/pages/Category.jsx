@@ -1,6 +1,5 @@
 import {
   collection,
-  doc,
   getDocs,
   limit,
   orderBy,
@@ -27,11 +26,13 @@ export default function Category() {
         const listingRef = collection(db, "listings");
         const q = query(
           listingRef,
-          where("type", "==", params.CategoryName),
+          where("type", "==", params.categoryName),
           orderBy("timestamp", "desc"),
           limit(8)
         );
         const querySnap = await getDocs(q);
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+        setLastFetchListing(lastVisible);
         const listings = [];
         querySnap.forEach((doc) => {
           return listings.push({
@@ -39,21 +40,21 @@ export default function Category() {
             data: doc.data(),
           });
         });
-        setListings(listingRef);
+        setListings(listings);
         setLoading(false);
       } catch (error) {
         toast.error("Could not fetch listing");
       }
     }
     fetchListings();
-  }, [params.CategoryName]);
+  }, [params.categoryName]);
 
   async function onFetchMoreListings() {
     try {
       const listingRef = collection(db, "listings");
       const q = query(
         listingRef,
-        where("type", "==", params.CategoryName),
+        where("type", "==", params.categoryName),
         orderBy("timestamp", "desc"),
         startAfter(lastFetchedListing),
         limit(4)
@@ -78,7 +79,7 @@ export default function Category() {
   return (
     <div className="max-w-6xl mx-auto px-3">
       <h1 className="text-3xl text-center mt-6 font-bold mb-6">
-        {params.CategoryName === "rent" ? "Places for rent" : "Places for sale"}
+        {params.categoryName === "rent" ? "Places for rent" : "Places for sale"}
       </h1>
       {loading ? (
         <Spinner />
@@ -109,7 +110,7 @@ export default function Category() {
       ) : (
         <p>
           There are no current{" "}
-          {params.CategoryName === "rent"
+          {params.categoryName === "rent"
             ? "places for rent"
             : "places for sale"}
         </p>

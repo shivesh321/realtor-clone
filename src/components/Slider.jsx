@@ -51,10 +51,10 @@ export default function Slider() {
           modules={[EffectFade]}
           autoplay={{ delay: 3000 }}
         >
-          {listings.map(({ data, id }) => (
+          {listings.map(({ data, Id }) => (
             <SwiperSlide
-              key={id}
-              onClick={() => navigate(`/category/${data.type}/${id}`)}
+              key={Id}
+              onClick={() => navigate(`/category/${data.type}/${Id}`)}
             >
               <div
                 style={{
